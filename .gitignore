@@ -1,0 +1,15 @@
+# Build files
+target/
+*.jar
+*.war
+
+# IDE files
+.idea/
+*.iml
+*.iws
+
+# Log files
+*.log
+
+# Maven
+.mvn/
