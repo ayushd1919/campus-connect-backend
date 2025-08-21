@@ -55,7 +55,7 @@ public class ExamService {
                 hod.getDepartment().getId(), semester);
     }
 
-    public ExamSchedule createExamSchedule (ExamScheduleDto scheduleDto){
+    public ExamSchedule createExamSchedule (ExamScheduleDto scheduleDto, String username){
         Exam exam = examRepository.findById(scheduleDto.getExamId())
                 .orElseThrow(() -> new RuntimeException("Exam not found"));
         Subject subject = subjectRepository.findById(scheduleDto.getSubjectId())

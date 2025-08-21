@@ -20,5 +20,5 @@ public interface SubjectRepository extends JpaRepository<Subject, Long> {
     List<Subject> findByDepartmentIdAndSemesterAndHasIaExamTrue(Long departmentId, Integer semester);
     List<Subject> findByDepartmentIdAndSemesterAndHasPracticalExamTrue(Long departmentId, Integer semester);
     List<Subject> findByDepartmentIdAndSemesterAndHasVivaExamTrue(Long departmentId, Integer semester);
-
+    boolean existsByIdAndDepartmentId(Long id, Long departmentId);
 }

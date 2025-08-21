@@ -3,14 +3,18 @@ package com.campusconnect.controller;
 import com.campusconnect.dto.ExamDto;
 import com.campusconnect.dto.ExamScheduleDto;
 import com.campusconnect.dto.HodDashboardDto;
+import com.campusconnect.dto.SubjectDto;
 import com.campusconnect.entity.Exam;
 import com.campusconnect.entity.ExamSchedule;
 import com.campusconnect.entity.Subject;
 import com.campusconnect.repository.ExamScheduleRepository;
+import com.campusconnect.repository.SubjectRepository;
 import com.campusconnect.service.ExamService;
 import com.campusconnect.service.HodDashboardService;
+import com.campusconnect.service.SubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -22,11 +26,12 @@ public class HodController {
 
     @Autowired
     private HodDashboardService dashboardService;
-
     @Autowired
     private ExamService examService;
     @Autowired
     private ExamScheduleRepository examScheduleRepository;
+    @Autowired
+    private SubjectService subjectService;
 
     @GetMapping("/dashboard")
     public ResponseEntity<HodDashboardDto> getDashboardData(Principal principal) {
@@ -46,8 +51,8 @@ public class HodController {
     }
 
     @PostMapping("/exams/schedule")
-    public ResponseEntity<ExamSchedule> createExamSchedule(@RequestBody ExamScheduleDto scheduleDto) {
-        return ResponseEntity.ok(examService.createExamSchedule(scheduleDto));
+    public ResponseEntity<ExamSchedule> createExamSchedule(@RequestBody ExamScheduleDto scheduleDto,Principal principal) {
+        return ResponseEntity.ok(examService.createExamSchedule(scheduleDto, principal.getName()));
     }
 
     @GetMapping("/exams")
@@ -63,6 +68,31 @@ public class HodController {
     @DeleteMapping("exams/{examId}/schedules/{scheduleId}")
     public ResponseEntity<Void> deleteSchedule(@PathVariable Long examId, @PathVariable Long scheduleId) {
         examScheduleRepository.deleteById(scheduleId);
+        return ResponseEntity.noContent().build();
+    }
+    // ===== SUBJECT MANAGEMENT (HOD-scoped) =====
+    @GetMapping("/subjects")
+    public ResponseEntity<List<Subject>> hodListSubjects(
+            @RequestParam(required = false) Integer semester, Principal principal) {
+        return ResponseEntity.ok(subjectService.hodListSubjects(principal.getName(),semester));
+    }
+
+    @PostMapping("/subjects")
+    public ResponseEntity<Subject> hodCreateSubject(@RequestBody SubjectDto dto, Principal principal) {
+        return ResponseEntity.ok(subjectService.hodCreateSubject(principal.getName(), dto));
+    }
+
+    @PutMapping("/subjects/{id}")
+    public ResponseEntity<Subject> hodUpdateSubject(
+            @PathVariable Long id,
+            @RequestBody SubjectDto dto,
+            Principal principal) {
+        return ResponseEntity.ok(subjectService.hodUpdateSubject(principal.getName(),id,dto));
+    }
+
+    @DeleteMapping("/subjects/{id}")
+    public ResponseEntity<Void> hodDeleteSubject(@PathVariable Long id, Principal principal) {
+        subjectService.hodDeleteSubject(principal.getName(),id);
         return ResponseEntity.noContent().build();
     }
 }

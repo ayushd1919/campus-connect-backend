@@ -41,15 +41,15 @@ public class Subject {
     @JoinColumn(name = "elective_track_id", nullable = true)
     private ElectiveTrack electiveTrack;
 
-    @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT true")
+    @Column(nullable = false)
     private boolean hasPracticalExam = false;
 
-    @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT false")
+    @Column(nullable = false)
     private boolean hasIaExam = true;
 
-    @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT false")
+    @Column(nullable = false)
     private boolean hasVivaExam = false;
 
-    @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT false")
+    @Column(nullable = false)
     private boolean hasSemesterExam = false;
 }
